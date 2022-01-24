@@ -33,9 +33,7 @@ const submitForm = () => {
     else{
         const data = getNewInstance(value, name, waitTime);
         console.log(data);
-        const k8sApiUtils = new K8sApiUtils('http://127.0.0.1:8001', {
-      // Authorization: 'Bearer <token>',
-    });
+        const k8sApiUtils = new K8sApiUtils();
     k8sApiUtils.postCustomResource(data, value, name).then((resp)=>{
         if(resp.status === 201){
             

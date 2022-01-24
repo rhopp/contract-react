@@ -29,9 +29,7 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
   const [isNavOpen, setIsNavOpen] = React.useState(true);
   const [isMobileView, setIsMobileView] = React.useState(true);
   const [isNavOpenMobile, setIsNavOpenMobile] = React.useState(false);
-  const k8sApiUtils = new K8sApiUtils('http://127.0.0.1:8001', {
-      // Authorization: 'Bearer <token>',
-    });
+  const k8sApiUtils = new K8sApiUtils();
   React.useEffect(()=> {
     k8sApiUtils.getNamespaces().then((el)=>{
       dispatch({type:'GETNamespaces', data: el})
