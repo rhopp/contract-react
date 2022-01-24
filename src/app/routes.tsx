@@ -9,12 +9,14 @@ import { NotFound } from '@app/NotFound/NotFound';
 import { useDocumentTitle } from '@app/utils/useDocumentTitle';
 import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
 import MyComponent from './Dashboard/MyComponent';
+import CreateCustomResource from './Dashboard/Create';
+import ViewCustomResource from './Dashboard/ViewCR';
 
 let routeFocusTimer: number;
 export interface IAppRoute {
   label?: string; // Excluding the label will exclude the route from the nav sidebar in AppLayout
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  component: React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any>;
+  component: any
   /* eslint-enable @typescript-eslint/no-explicit-any */
   exact?: boolean;
   path: string;
@@ -31,6 +33,20 @@ export interface IAppRouteGroup {
 export type AppRouteConfig = IAppRoute | IAppRouteGroup;
 
 const routes: AppRouteConfig[] = [
+  {
+    component: CreateCustomResource,
+    exact: true,
+    label: 'Create Custom Resource',
+    path: '/create',
+    title: 'Create Custom Resource'
+  },
+  {
+    component: ViewCustomResource,
+    exact: true,
+    label: 'View Custom Resource',
+    path: '/view',
+    title: 'View Custom Resource'
+  },
   {
     component: MyComponent,
     exact: true,

@@ -8,19 +8,35 @@ import {
   Page,
   PageHeader,
   PageSidebar,
-  SkipToContent
+  SkipToContent,
+  Alert,
+  AlertActionCloseButton,
+  AlertGroup,
+  AlertVariant,
+  PageSection
 } from '@patternfly/react-core';
 import { routes, IAppRoute, IAppRouteGroup } from '@app/routes';
-import logo from '@app/bgimages/Patternfly-Logo.svg';
+import { Context } from "src/store/store";
+import { K8sApiUtils } from 'src/utils/K8sApiUtils';
+import logo from '@app/bgimages/Logo-RedHat-A-Reverse-RGB.svg';
 
 interface IAppLayout {
   children: React.ReactNode;
 }
 
 const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
+  const {state, dispatch} = React.useContext(Context)
   const [isNavOpen, setIsNavOpen] = React.useState(true);
   const [isMobileView, setIsMobileView] = React.useState(true);
   const [isNavOpenMobile, setIsNavOpenMobile] = React.useState(false);
+  const k8sApiUtils = new K8sApiUtils('http://127.0.0.1:8001', {
+      // Authorization: 'Bearer <token>',
+    });
+  React.useEffect(()=> {
+    k8sApiUtils.getNamespaces().then((el)=>{
+      dispatch({type:'GETNamespaces', data: el})
+    })
+  },[])
   const onNavToggleMobile = () => {
     setIsNavOpenMobile(!isNavOpenMobile);
   };
@@ -37,7 +53,7 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
       history.push('/');
     }
     return (
-      <img src={logo} onClick={handleClick} alt="PatternFly Logo" />
+      <img src={logo} style={{height: '32px'}} onClick={handleClick} alt="PatternFly Logo" />
     );
   }
 
@@ -106,7 +122,27 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
       sidebar={Sidebar}
       onPageResize={onPageResize}
       skipToContent={PageSkipToContent}>
+        <PageSection padding={{ default: 'noPadding', md: 'padding', lg: 'padding' }}>
       {children}
+      </PageSection>
+      <AlertGroup isToast isLiveRegion>
+          {state.alerts.map(({key, variant, title, details}) => (
+            <Alert
+            //isExpandable
+              variant={AlertVariant[variant]}
+              title={title}
+              actionClose={
+                <AlertActionCloseButton
+                  title={title}
+                  variantLabel={`${variant} alert`}
+                  onClose={() => dispatch({ type: "REMOVE_Alert", data: key })}
+                />
+              }
+              key={key} >
+                {/* <Text>{details}</Text> */}
+              </Alert>
+          ))}
+        </AlertGroup>
     </Page>
   );
 }
