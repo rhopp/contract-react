@@ -4,10 +4,12 @@ import axios, { AxiosRequestHeaders, AxiosInstance } from 'axios';
 export class K8sApiUtils {
   axiosInstance: AxiosInstance;
 
-  constructor(baseURL: string, headers: AxiosRequestHeaders) {
+  constructor() {
     this.axiosInstance = axios.create({
-      baseURL: baseURL,
-      headers: headers,
+      baseURL: 'http://127.0.0.1:8001',
+      headers: {
+        // Authorization: 'Bearer <token>',
+      },
     });
   }
 

@@ -16,9 +16,7 @@ interface itemsR {
 const ViewCustomResource : React.FunctionComponent<never> = () => {
     const {state, dispatch} = React.useContext(Context)
     const [context, setContext] = useState('default')
-    const k8sApiUtils = new K8sApiUtils('http://127.0.0.1:8001', {
-      // Authorization: 'Bearer <token>',
-    });
+    const k8sApiUtils = new K8sApiUtils();
     useEffect(()=> {
         k8sApiUtils.getCustomResources(context).then((value)=> {
             dispatch({type: 'APIData', data: value['items']})
