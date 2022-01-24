@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Flex, FlexItem, Form, FormGroup, TextInput, FormHelperText, Grid, GridItem, PageSection, ActionGroup, Button, Alert, AlertActionCloseButton, AlertGroup, AlertVariant, getUniqueId } from '@patternfly/react-core';
+import { Flex, FlexItem, Form, FormGroup, TextInput, FormHelperText, Grid, GridItem, PageSection, ActionGroup, Button, Alert, AlertActionCloseButton, AlertGroup, AlertVariant, getUniqueId, NumberInput } from '@patternfly/react-core';
 import ExclamationCircleIcon from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
 import getNewInstance from 'src/utils/getjson';
 import { K8sApiUtils } from 'src/utils/K8sApiUtils';
@@ -16,13 +16,28 @@ const [value, setvalue] = useState('');
 const [name, setName] = useState('');
 const [waitTime, setWaitTime] = useState(10);
 const handleTextInputChange = (value) => {
+    value === '' ? 
+        setvalidated0("default") : setvalidated0("success")
+    if(value.length < 4) setvalidated0("warning");
     setvalue(value)
 }
 const handleNameInputChange = (value) => {
+    value === '' ? 
+        setvalidated1("default") : setvalidated1("success")
+    if(value.length < 4) setvalidated1("warning");
     setName(value)
 }
 const handleWaitTimeChange = (value) => {
-    setWaitTime(value);
+    
+        setWaitTime(parseInt(value));
+
+    
+}
+function onMinus1(){
+    setWaitTime(waitTime - 1);
+}
+function onPlus1(){
+    setWaitTime(waitTime + 1)
 }
 const submitForm = () => {
     setLoading(true)
@@ -132,13 +147,18 @@ return (
           fieldId="time-1"
           validated={validated2}
         >
-          <TextInput
-            validated={validated2}
-            value={waitTime}
-            id="time-1"
-            aria-describedby="time-1-helper"
-            onChange={handleWaitTimeChange}
-          />
+          <NumberInput
+          value={waitTime}
+          onMinus={onMinus1}
+          onChange={handleWaitTimeChange}
+          onPlus={onPlus1}
+          inputName="input 1"
+          inputAriaLabel="number input 1"
+          minusBtnAriaLabel="minus 1"
+          plusBtnAriaLabel="plus 1"
+          unit="secs"
+        />
+        <br />
         </FormGroup>
         </FlexItem>
         <FlexItem>
