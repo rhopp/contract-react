@@ -33,10 +33,10 @@ class MyComponent extends React.Component<any, any> {
 
   async buttonClicked() {
     this.setState({ isLoading: 'true', pods: [] });
-    const k8sApiUtils = new K8sApiUtils('https://api.app.studio.adapters-crs-qe.com:6443', {
-      Authorization: 'Bearer <PUT YOUR TOKEN HERE>',
+    const k8sApiUtils = new K8sApiUtils('http://127.0.0.1:8001', {
+      // Authorization: 'Bearer sha256~V-y3IKFucHwY5E_F2p2njpaBDrq-dZC9Ak1hsJCdLbs',
     });
-    const pods = await k8sApiUtils.getHelloWorlds(this.state.input);
+    const pods = await k8sApiUtils.getPods(this.state.input);
     this.setState({ pods: pods.items });
     this.setState({ isLoading: false });
   }
