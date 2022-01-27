@@ -34,7 +34,7 @@ class MyComponent extends React.Component<any, any> {
   async buttonClicked() {
     this.setState({ isLoading: 'true', pods: [] });
     const k8sApiUtils = new K8sApiUtils();
-    const pods = await k8sApiUtils.getPods(this.state.input);
+    const pods = await k8sApiUtils.getCustomResources(this.state.input);
     this.setState({ pods: pods.items });
     this.setState({ isLoading: false });
   }

@@ -6,20 +6,12 @@ export class K8sApiUtils {
 
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: 'http://127.0.0.1:8001',
+      baseURL: process.env.K8S_API_URL,
       headers: {
-        // Authorization: 'Bearer <token>',
+        Authorization: `Bearer ${process.env.BEARER_TOKEN}`,
       },
     });
-  }
-
-  async getPods(namespace: string) {
-    const response = await this.axiosInstance.get(`api/v1/namespaces/${namespace}/pods`);
-    if (response.status != 200) {
-      throw new Error(`error in response. Code: ${response.status}`);
-    }
-    console.log(response.data);
-    return response.data;
+    console.log(`Axios defaults: ${this.axiosInstance.defaults}`);
   }
 
   async getNamespaces() {
@@ -28,15 +20,15 @@ export class K8sApiUtils {
     if (response.status != 200) {
       throw new Error(`error in response. Code: ${response.status}`);
     }
-    response.data.items.forEach(element => {
+    response.data.items.forEach((element) => {
       const name = element.metadata.name;
-      options.push({ value: name, label: name, disabled: false },)
+      options.push({ value: name, label: name, disabled: false });
     });
     return options;
   }
 
   async getCustomResources(namespace: string) {
-    const response = await this.axiosInstance.get(`apis/webapp.appstudio.qe/v1/namespaces/${namespace}/contracttests`);
+    const response = await this.axiosInstance.get(`/apis/webapp.appstudio.qe/v1/namespaces/${namespace}/contracttests`);
     if (response.status != 200) {
       throw new Error(`error in response. Code: ${response.status}`);
     }
@@ -44,7 +36,9 @@ export class K8sApiUtils {
     return response.data;
   }
   async deleteCustomResource(namespace: string, name: string) {
-    const response = await this.axiosInstance.delete(`apis/webapp.appstudio.qe/v1/namespaces/${namespace}/contracttests/${name}`);
+    const response = await this.axiosInstance.delete(
+      `/apis/webapp.appstudio.qe/v1/namespaces/${namespace}/contracttests/${name}`
+    );
     if (response.status != 200) {
       throw new Error(`error in response. Code: ${response.status}`);
     }
@@ -60,12 +54,17 @@ export class K8sApiUtils {
     return response.data;
   }
 
-  async postCustomResource(data: any, namespace: string, name: string){
-    const response = await this.axiosInstance.post(`apis/webapp.appstudio.qe/v1/namespaces/${namespace}/contracttests`, data, {
-      headers: {
-        // Overwrite Axios's automatically set Content-Type
-        'Content-Type': 'application/json'
-      }});
+  async postCustomResource(data: any, namespace: string) {
+    const response = await this.axiosInstance.post(
+      `/apis/webapp.appstudio.qe/v1/namespaces/${namespace}/contracttests`,
+      data,
+      {
+        headers: {
+          // Overwrite Axios's automatically set Content-Type
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     if (response.status != 201) {
       throw new Error(`error in response. Code: ${response.status}`);
     }
