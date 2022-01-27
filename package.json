@@ -23,7 +23,8 @@
     "bundle-profile:analyze": "npm run build:bundle-profile && webpack-bundle-analyzer ./stats.json",
     "clean": "rimraf dist",
     "storybook": "start-storybook -p 6006",
-    "build:storybook": "build-storybook"
+    "build:storybook": "build-storybook",
+    "pact:publish": "pact-broker publish ./pact/pacts -u admin -p admin --consumer-app-version \"$(npx @pact-foundation/absolute-version)\" --auto-detect-version-properties --broker-base-url=http://pact-broker-pact-broker.apps.app.studio.adapters-crs-qe.com"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.2.9",
